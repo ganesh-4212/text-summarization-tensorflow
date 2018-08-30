@@ -53,7 +53,7 @@ def build_dict(step, toy=False):
         with open("word_dict.pickle", "rb") as f:
             word_dict = pickle.load(f)
 
-    reversed_dict = dict(zip(word_dict.values(), word_dict.keys()))
+    reversed_dict = dict(zip(word_dict.values(), word_dict.keys())) # reversing dictionary keys into values and values into key
 
     article_max_len = 50
     summary_max_len = 15
@@ -72,13 +72,13 @@ def build_dataset(step, word_dict, article_max_len, summary_max_len, toy=False):
         raise NotImplementedError
 
     x = list(map(lambda d: word_tokenize(d), article_list)) # converting each article list item into list of tokenized words.
-    x = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), x)) 
-    x = list(map(lambda d: d[:article_max_len], x))
-    x = list(map(lambda d: d + (article_max_len - len(d)) * [word_dict["<padding>"]], x))
+    x = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), x)) # converting tokenized words to word weight (From dictionary values)
+    x = list(map(lambda d: d[:article_max_len], x)) #trimming article length to max length.
+    x = list(map(lambda d: d + (article_max_len - len(d)) * [word_dict["<padding>"]], x)) # if article length is less than maz lenth then assigning padding for rest elements.
 
-    y = list(map(lambda d: word_tokenize(d), title_list))
-    y = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), y))
-    y = list(map(lambda d: d[:(summary_max_len-1)], y))
+    y = list(map(lambda d: word_tokenize(d), title_list)) # converting each title line item into list of tokenized words.
+    y = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), y)) # converting tokenized words to word weight (From dictionary values)
+    y = list(map(lambda d: d[:(summary_max_len-1)], y)) #Trimming extra characters in title (max summary_max_len)
 
     return x, y
 
