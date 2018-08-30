@@ -22,7 +22,7 @@ def clean_str(sentence):
 def get_text_list(data_path, toy):
     with open(data_path, "r") as f:
         if not toy:
-            return list(map(lambda x: clean_str(x.strip()), f.readlines()))
+            return list(map(lambda x: clean_str(x.strip()), f.readlines())) # strip is trimming spaces.
         else:
             return list(map(lambda x: clean_str(x.strip()), f.readlines()))[:50000]
 
@@ -37,14 +37,14 @@ def build_dict(step, toy=False):
             for word in word_tokenize(sentence):
                 words.append(word)
 
-        word_counter = collections.Counter(words).most_common()
+        word_counter = collections.Counter(words).most_common() #return word and it's occurance with sort by most common. ex: [('a', 2), ('this', 1), ('is', 1), ('sample', 1), ('word', 1)]
         word_dict = dict()
         word_dict["<padding>"] = 0
         word_dict["<unk>"] = 1
         word_dict["<s>"] = 2
         word_dict["</s>"] = 3
         for word, _ in word_counter:
-            word_dict[word] = len(word_dict)
+            word_dict[word] = len(word_dict) #assinging words to dictionary (word as key and index as value)
 
         with open("word_dict.pickle", "wb") as f:
             pickle.dump(word_dict, f)
@@ -71,8 +71,8 @@ def build_dataset(step, word_dict, article_max_len, summary_max_len, toy=False):
     else:
         raise NotImplementedError
 
-    x = list(map(lambda d: word_tokenize(d), article_list))
-    x = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), x))
+    x = list(map(lambda d: word_tokenize(d), article_list)) # converting each article list item into list of tokenized words.
+    x = list(map(lambda d: list(map(lambda w: word_dict.get(w, word_dict["<unk>"]), d)), x)) 
     x = list(map(lambda d: d[:article_max_len], x))
     x = list(map(lambda d: d + (article_max_len - len(d)) * [word_dict["<padding>"]], x))
 
