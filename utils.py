@@ -63,11 +63,11 @@ def build_dict(step, toy=False):
 
 def build_dataset(step, word_dict, article_max_len, summary_max_len, toy=False):
     if step == "train":
-        article_list = get_text_list(train_article_path, toy)
-        title_list = get_text_list(train_title_path, toy)
+        article_list = get_text_list(train_article_path, toy) # getting training article
+        title_list = get_text_list(train_title_path, toy) # getting training article title
     elif step == "valid":
-        article_list = get_text_list(valid_article_path, toy)
-        title_list = get_text_list(valid_title_path, toy)
+        article_list = get_text_list(valid_article_path, toy) # getting test article
+        title_list = get_text_list(valid_title_path, toy) # getting training article title
     else:
         raise NotImplementedError
 
